@@ -1,0 +1,11 @@
+
+body {
+    background-color: #f7f8fc;
+    padding: 0;
+    margin: 0
+}
+
+* {
+    /* font-family: 'Noto Sans JP' !important; */
+    font-family: 'Heebo', sans-serif !important;
+}
