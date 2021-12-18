@@ -11,7 +11,7 @@ import FileBase from "react-file-base64";
 import { useHistory } from "react-router-dom";
 import ChipInput from "material-ui-chip-input";
 
-import { createPost } from "../../actions/posts";
+import { createBlog } from "../../states/action-creators/blogs";
 import useStyles from "./styles";
 import useForm from "../../composables/useForm";
 
@@ -32,7 +32,7 @@ const CreateBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(createPost({ ...value, name: user?.result?.name }));
+    dispatch(createBlog({ ...value, name: user?.result?.name }));
 
     setValue({
       title: "",

@@ -17,30 +17,29 @@ import moment from "moment";
 import { useHistory } from "react-router-dom";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import { Link } from "react-router-dom";
 
-import { likePost, deletePost, getPost } from "../../../actions/posts";
+import { likeBlog, deleteBlog } from "../../../states/action-creators/blogs";
 import useStyles from "./styles";
 
-const Post = ({ post }) => {
+const Blog = ({ blog }) => {
   const user = JSON.parse(localStorage.getItem("profile"));
-  const [likes, setLikes] = useState(post?.likes);
+  const [likes, setLikes] = useState(blog?.likes);
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
 
   const userId = user?.result.googleId || user?.result?._id;
-  const hasLikedPost = post?.likes?.find((like) => like === userId);
+  const hasLikedblog = blog?.likes?.find((like) => like === userId);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
   const handleLike = async () => {
-    dispatch(likePost(post._id));
+    dispatch(likeBlog(blog._id));
 
-    if (hasLikedPost) {
-      setLikes(post.likes.filter((id) => id !== userId));
+    if (hasLikedblog) {
+      setLikes(blog.likes.filter((id) => id !== userId));
     } else {
-      setLikes([...post.likes, userId]);
+      setLikes([...blog.likes, userId]);
     }
   };
 
@@ -78,10 +77,10 @@ const Post = ({ post }) => {
     );
   };
 
-  const openPost = (e) => {
-    // dispatch(getPost(post._id, history));
+  const openblog = (e) => {
+    // dispatch(getblog(blog._id, history));
 
-    history.push(`/posts/${post._id}`);
+    history.push(`/blogs/${blog._id}`);
   };
 
   return (
@@ -90,24 +89,24 @@ const Post = ({ post }) => {
         component="span"
         name="test"
         className={classes.cardAction}
-        onClick={openPost}
+        onClick={openblog}
       >
         <CardMedia
           className={classes.media}
           image={
-            post.imageUrl ||
+            blog.imageUrl ||
             "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"
           }
-          title={post.title}
+          title={blog.title}
         />
         <div className={classes.overlay}>
-          <Typography variant="h6">{post.name}</Typography>
+          <Typography variant="h6">{blog.name}</Typography>
           <Typography variant="body2">
-            {moment(post.createdAt).fromNow()}
+            {moment(blog.createdAt).fromNow()}
           </Typography>
         </div>
-        {(user?.result?.googleId === post?.creator ||
-          user?.result?._id === post?.creator) && (
+        {(user?.result?.googleId === blog?.creator ||
+          user?.result?._id === blog?.creator) && (
           <div className={classes.overlay2} name="edit">
             <Button
               onClick={(e) => {
@@ -139,7 +138,7 @@ const Post = ({ post }) => {
                   e.stopPropagation();
                   handleClose();
                   
-                  history.push(`/blog/update/${post._id}`);
+                  history.push(`/blog/update/${blog._id}`);
                 }}
               >
                 Update
@@ -149,7 +148,7 @@ const Post = ({ post }) => {
         )}
         <div className={classes.details}>
           <Typography variant="body2" color="textSecondary" component="h2">
-            {post.tags.map((tag) => `#${tag} `)}
+            {blog.tags.map((tag) => `#${tag} `)}
           </Typography>
         </div>
         <Typography
@@ -158,11 +157,11 @@ const Post = ({ post }) => {
           variant="h5"
           component="h2"
         >
-          {post.title}
+          {blog.title}
         </Typography>
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-            {post.message.split(" ").splice(0, 20).join(" ")}...
+            {blog.message.split(" ").splice(0, 20).join(" ")}...
           </Typography>
         </CardContent>
       </ButtonBase>
@@ -175,12 +174,12 @@ const Post = ({ post }) => {
         >
           <Likes />
         </Button>
-        {(user?.result?.googleId === post?.creator ||
-          user?.result?._id === post?.creator) && (
+        {(user?.result?.googleId === blog?.creator ||
+          user?.result?._id === blog?.creator) && (
           <Button
             size="small"
             color="secondary"
-            onClick={() => dispatch(deletePost(post._id))}
+            onClick={() => dispatch(deleteBlog(blog._id))}
           >
             <DeleteIcon fontSize="small" /> &nbsp; Delete
           </Button>
@@ -190,4 +189,4 @@ const Post = ({ post }) => {
   );
 };
 
-export default Post;
+export default Blog;

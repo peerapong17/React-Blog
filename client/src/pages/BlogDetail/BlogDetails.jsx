@@ -4,30 +4,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useParams, useHistory } from 'react-router-dom';
 
-import { getPost, getPostsBySearch } from '../../actions/posts';
+import { getBlog, getBlogsBySearch } from '../../states/action-creators/blogs';
 import CommentSection from '../../components/Comment/CommentSection';
 import useStyles from './styles';
 
 const Post = () => {
-  const { post, posts, isLoading } = useSelector((state) => state.posts);
+  const { post, blogs, isLoading } = useSelector((state) => state.blogs);
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(getPost(id));
+    dispatch(getBlog(id));
   }, [id]);
 
   useEffect(() => {
     if (post) {
-      dispatch(getPostsBySearch({ search: 'none', tags: post?.tags.join(',') }));
+      dispatch(getBlogsBySearch({ search: 'none', tags: post?.tags.join(',') }));
     }
   }, [post]);
 
   if (!post) return null;
 
-  const openPost = (_id) => history.push(`/posts/${_id}`);
+  const openPost = (_id) => history.push(`/blogs/${_id}`);
 
   if (isLoading) {
     return (
@@ -37,7 +37,7 @@ const Post = () => {
     );
   }
 
-  const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
+  const recommendedblogs = blogs.filter(({ _id }) => _id !== post._id);
 
   return (
     <Paper style={{ padding: '20px', borderRadius: '15px' }} elevation={6}>
@@ -58,12 +58,12 @@ const Post = () => {
           <img className={classes.media} src={post.imageUrl || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={post.title} />
         </div>
       </div>
-      {!!recommendedPosts.length && (
+      {!!recommendedblogs.length && (
         <div className={classes.section}>
           <Typography gutterBottom variant="h5">You might also like:</Typography>
           <Divider />
-          <div className={classes.recommendedPosts}>
-            {recommendedPosts.map(({ title, name, message, likes, selectedFile, _id }) => (
+          <div className={classes.recommendedblogs}>
+            {recommendedblogs.map(({ title, name, message, likes, selectedFile, _id }) => (
               <div style={{ margin: '20px', cursor: 'pointer' }} onClick={() => openPost(_id)} key={_id}>
                 <Typography gutterBottom variant="h6">{title}</Typography>
                 <Typography gutterBottom variant="subtitle2">{name}</Typography>

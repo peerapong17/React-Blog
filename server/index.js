@@ -1,12 +1,15 @@
 
+import dotenv from 'dotenv'
+dotenv.config()
+
 import express from 'express';
-import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import path from "path"
 
-import postRoutes from './routes/posts.js';
+import postRoutes from './routes/blogs.js';
 import userRouter from "./routes/user.js";
+import passwordRouter from "./routes/password.js"
 
 const app = express();
 
@@ -16,8 +19,9 @@ app.use(cors());
 
 app.use("/images", express.static(path.join(process.cwd() + "/images")));
 
-app.use('/posts', postRoutes);
+app.use('/blogs', postRoutes);
 app.use("/user", userRouter);
+app.use("/reset-password", passwordRouter);
 
 const CONNECTION_URL = 'mongodb+srv://peerapong:peerapong123@cluster0.xnoei.mongodb.net/blogApp?retryWrites=true&w=majority';
 const PORT = process.env.PORT|| 5000;

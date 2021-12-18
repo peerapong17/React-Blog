@@ -2,23 +2,23 @@ import {
   START_LOADING,
   END_LOADING,
   FETCH_ALL,
-  FETCH_POST,
+  FETCH_BLOG,
   FETCH_BY_SEARCH,
   CREATE,
   UPDATE,
   DELETE,
   LIKE,
   COMMENT,
-} from "../constants/actionTypes";
-import * as api from "../api/index.js";
+} from "../action-types/actionTypes";
+import * as api from "../../api/index";
 
-export const getPost = (id) => async (dispatch) => {
+export const getBlog = (id) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
 
-    const { data } = await api.fetchPost(id);
+    const { data } = await api.fetchBlog(id);
 
-    dispatch({ type: FETCH_POST, payload: { post: data } });
+    dispatch({ type: FETCH_BLOG, payload: { blog: data } });
 
     dispatch({ type: END_LOADING });
   } catch (error) {
@@ -26,12 +26,12 @@ export const getPost = (id) => async (dispatch) => {
   }
 };
 
-export const getPosts = (page) => async (dispatch) => {
+export const getBlogs = (page) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const {
       data: { data, currentPage, numberOfPages },
-    } = await api.fetchPosts(page);
+    } = await api.fetchBlogs(page);
 
     dispatch({
       type: FETCH_ALL,
@@ -43,12 +43,12 @@ export const getPosts = (page) => async (dispatch) => {
   }
 };
 
-export const getUserPosts = (page) => async (dispatch) => {
+export const getUserblogs = (page) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const {
       data: { data, currentPage, numberOfPages },
-    } = await api.fetchUserPosts(page);
+    } = await api.fetchUserBlogs(page);
 
     dispatch({
       type: FETCH_ALL,
@@ -60,13 +60,13 @@ export const getUserPosts = (page) => async (dispatch) => {
   }
 };
 
-export const getPostsBySearch = (searchQuery) => async (dispatch) => {
+export const getBlogsBySearch = (searchQuery) => async (dispatch) => {
   console.log(searchQuery)
   try {
     dispatch({ type: START_LOADING });
     const {
       data: { data },
-    } = await api.fetchPostsBySearch(searchQuery);
+    } = await api.fetchBlogsBySearch(searchQuery);
 
     console.log(data)
 
@@ -77,16 +77,16 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
   }
 };
 
-export const createPost = (post, history) => async (dispatch) => {
+export const createBlog = (blog, history) => async (dispatch) => {
   const formData = new FormData();
-  formData.append("title", post.title);
-  formData.append("message", post.message);
-  formData.append("tags", post.tags);
-  formData.append("image", post.imageFile);
+  formData.append("title", blog.title);
+  formData.append("message", blog.message);
+  formData.append("tags", blog.tags);
+  formData.append("image", blog.imageFile);
 
   try {
     dispatch({ type: START_LOADING });
-    const { data } = await api.createPost(formData);
+    const { data } = await api.createBlog(formData);
 
     dispatch({ type: CREATE, payload: data });
 
@@ -96,18 +96,18 @@ export const createPost = (post, history) => async (dispatch) => {
   }
 };
 
-export const updatePost = (id, post) => async (dispatch) => {
+export const updateBlog = (id, blog) => async (dispatch) => {
   const formData = new FormData();
-  formData.append("title", post.title);
-  formData.append("message", post.message);
-  formData.append("tags", post.tags);
+  formData.append("title", blog.title);
+  formData.append("message", blog.message);
+  formData.append("tags", blog.tags);
 
-  if (post.imageFile != null) {
-    formData.append("image", post.imageFile);
+  if (blog.imageFile != null) {
+    formData.append("image", blog.imageFile);
   }
 
   try {
-    const { data } = await api.updatePost(id, formData);
+    const { data } = await api.updateBlog(id, formData);
 
     console.log(data);
 
@@ -117,11 +117,11 @@ export const updatePost = (id, post) => async (dispatch) => {
   }
 };
 
-export const likePost = (id) => async (dispatch) => {
+export const likeBlog = (id) => async (dispatch) => {
   const user = JSON.parse(localStorage.getItem("profile"));
 
   try {
-    const { data } = await api.likePost(id, user?.token);
+    const { data } = await api.likeBlog(id, user?.token);
 
     dispatch({ type: LIKE, payload: data });
   } catch (error) {
@@ -129,7 +129,7 @@ export const likePost = (id) => async (dispatch) => {
   }
 };
 
-export const commentPost = (value, id) => async (dispatch) => {
+export const commentBlog = (value, id) => async (dispatch) => {
   try {
     const { data } = await api.comment(value, id);
 
@@ -141,9 +141,9 @@ export const commentPost = (value, id) => async (dispatch) => {
   }
 };
 
-export const deletePost = (id) => async (dispatch) => {
+export const deleteBlog = (id) => async (dispatch) => {
   try {
-    await await api.deletePost(id);
+    await await api.deleteBlog(id);
 
     dispatch({ type: DELETE, payload: id });
   } catch (error) {

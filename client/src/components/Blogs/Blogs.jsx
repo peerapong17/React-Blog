@@ -2,14 +2,14 @@ import React from "react";
 import { Grid, CircularProgress } from "@material-ui/core";
 import { useSelector } from "react-redux";
 
-import Post from "./Post/Post";
+import Blog from "./Blog/Blog";
 import useStyles from "./styles";
 
-const Posts = () => {
-  const { posts, isLoading } = useSelector((state) => state.posts);
+const Blogs = () => {
+  const { blogs, isLoading } = useSelector((state) => state.blogs);
   const classes = useStyles();
 
-  if (!posts.length && !isLoading) return "No posts";
+  if (!blogs.length && !isLoading) return "No blogs";
 
   return isLoading ? (
     <CircularProgress />
@@ -20,13 +20,13 @@ const Posts = () => {
       alignItems="stretch"
       spacing={3}
     >
-      {posts?.map((post) => (
-        <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
-          <Post post={post} />
+      {blogs?.map((blog) => (
+        <Grid key={blog._id} item xs={12} sm={12} md={6} lg={3}>
+          <Blog blog={blog} />
         </Grid>
       ))}
     </Grid>
   );
 };
 
-export default Posts;
+export default Blogs;

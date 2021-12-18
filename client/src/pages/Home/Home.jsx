@@ -15,11 +15,10 @@ import { useHistory, useLocation } from "react-router-dom";
 import ChipInput from "material-ui-chip-input";
 import { useSelector } from "react-redux";
 
-import { getPostsBySearch } from "../../actions/posts";
 import Pagination from "../../components/Pagination/Pagination";
 import useStyles from "./styles";
-import Post from "../../components/Posts/Post/Post";
-import { getPosts } from "../../actions/posts";
+import Blog from "../../components/Blogs/Blog/Blog";
+import { getBlogs, getBlogsBySearch } from "../../states/action-creators/blogs";
 import useForm from "../../composables/useForm";
 
 const Home = () => {
@@ -28,7 +27,7 @@ const Home = () => {
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
   const tagsQuery = query.get("tags");
-  const { posts, isLoading } = useSelector((state) => state.posts);
+  const { blogs, isLoading } = useSelector((state) => state.blogs);
   const { value, setValue, onChange, handleAddChip, handleDeleteChip } =
     useForm({
       search: "",
@@ -45,7 +44,7 @@ const Home = () => {
         tags: tagsQuery ? tagsQuery.split(",") : [],
       });
       dispatch(
-        getPostsBySearch({
+        getBlogsBySearch({
           page,
           search: searchQuery ? searchQuery : "",
           tags: tagsQuery ? tagsQuery : "",
@@ -56,15 +55,15 @@ const Home = () => {
         search: "",
         tags: [],
       });
-      dispatch(getPosts(page));
+      dispatch(getBlogs(page));
     }
   }, [page, searchQuery, tagsQuery]);
 
-  const searchPost = () => {
+  const searchBlog = () => {
     if (value.search.trim() || value.tags.length > 0) {
       console.log(value.tags);
       history.push(
-        `/posts?page=1${value.search ? `&searchQuery=${value.search}` : ""}${
+        `/blogs?page=1${value.search ? `&searchQuery=${value.search}` : ""}${
           value.tags.length > 0 ? `&tags=${value.tags.join(",")}` : ""
         }`
       );
@@ -73,7 +72,7 @@ const Home = () => {
 
   const handleKeyPress = (e) => {
     if (e.keyCode === 13) {
-      searchPost();
+      searchBlog();
     }
   };
 
@@ -94,17 +93,17 @@ const Home = () => {
               </div>
             ) : (
               <Grid container alignItems="stretch" spacing={3}>
-                {posts?.length > 0 ? (
-                  posts?.map((post) => {
+                {blogs?.length > 0 ? (
+                  blogs?.map((blog) => {
                     return (
-                      <Grid key={post._id} item xs={12} sm={12} md={6} lg={4}>
-                        <Post key={post._id} post={post} />
+                      <Grid key={blog._id} item xs={12} sm={12} md={6} lg={4}>
+                        <Blog key={blog._id} blog={blog} />
                       </Grid>
                     );
                   })
                 ) : (
                   <div className={classes.justifyCenter}>
-                    <Typography>No post create yet.</Typography>
+                    <Typography>No blog create yet.</Typography>
                   </div>
                 )}
               </Grid>
@@ -134,7 +133,7 @@ const Home = () => {
                 variant="outlined"
               />
               <Button
-                onClick={searchPost}
+                onClick={searchBlog}
                 className={classes.searchButton}
                 variant="contained"
                 color="primary"

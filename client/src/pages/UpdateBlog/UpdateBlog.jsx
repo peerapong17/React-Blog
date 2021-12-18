@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import ChipInput from "material-ui-chip-input";
 
-import { getPost, updatePost } from "../../actions/posts";
+import { getBlog, updateBlog } from "../../states/action-creators/blogs";
 import useStyles from "./styles";
 import useForm from "../../composables/useForm";
 
@@ -20,7 +20,7 @@ const UpdateBlog = () => {
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("profile"));
   const history = useHistory();
-  const { post, isLoading } = useSelector((state) => state.posts);
+  const { post, isLoading } = useSelector((state) => state.blogs);
   const { id } = useParams();
   const { value, setValue, onChange, handleAddChip, handleDeleteChip } =
     useForm({});
@@ -34,7 +34,7 @@ const UpdateBlog = () => {
 
   React.useEffect(() => {
     if (isEmpty(post)) {
-      dispatch(getPost(id));
+      dispatch(getBlog(id));
     } else {
       setValue({
         title: post.title,
@@ -48,7 +48,7 @@ const UpdateBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(updatePost(id, { ...value, name: user?.result?.name }));
+    dispatch(updateBlog(id, { ...value, name: user?.result?.name }));
 
     setValue({
       title: "",

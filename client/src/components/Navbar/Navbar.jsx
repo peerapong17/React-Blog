@@ -12,7 +12,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import useStyles from "./styles";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import * as actionType from "../../constants/actionTypes";
+import * as actionType from "../../states/action-types/actionTypes";
 import { useHistory } from "react-router-dom";
 
 export default function SearchAppBar() {
@@ -35,7 +35,7 @@ export default function SearchAppBar() {
 
     dispatch({ type: actionType.LOGOUT });
 
-    history.push("/auth");
+    history.push("/sign-in");
   };
 
   return (
@@ -52,7 +52,7 @@ export default function SearchAppBar() {
           </IconButton>
           <Typography
             component={Link}
-            to="/posts?page=1"
+            to="/blogs?page=1"
             className={classes.title}
             variant="h6"
             noWrap
@@ -97,11 +97,7 @@ export default function SearchAppBar() {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem
-                component={Link}
-                to="/blog/user"
-                onClick={handleClose}
-              >
+              <MenuItem component={Link} to="/blog/user" onClick={handleClose}>
                 My Blog
               </MenuItem>
               <MenuItem

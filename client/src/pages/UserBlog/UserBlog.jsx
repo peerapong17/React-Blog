@@ -15,11 +15,10 @@ import { useHistory, useLocation } from "react-router-dom";
 import ChipInput from "material-ui-chip-input";
 import { useSelector } from "react-redux";
 
-import { getPostsBySearch } from "../../actions/posts";
 import Pagination from "../../components/Pagination/Pagination";
 import useStyles from "./styles";
-import Post from "../../components/Posts/Post/Post";
-import { getUserPosts } from "../../actions/posts";
+import Blog from "../../components/Blogs/Blog/Blog";
+import { getUserblogs, getBlogsBySearch } from "../../states/action-creators/blogs";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -29,7 +28,7 @@ const Home = () => {
   const query = useQuery();
   const page = query.get("page") || 1;
   const searchQuery = query.get("searchQuery");
-  const { posts, isLoading } = useSelector((state) => state.posts);
+  const { blogs, isLoading } = useSelector((state) => state.blogs);
 
   const dispatch = useDispatch();
 
@@ -39,22 +38,22 @@ const Home = () => {
 
   React.useEffect(() => {
     if (page) {
-      dispatch(getUserPosts(page));
+      dispatch(getUserblogs(page));
     }
   }, [dispatch, page]);
 
-  const searchPost = () => {
+  const searchBlog = () => {
     if (search.trim() || tags) {
-      dispatch(getPostsBySearch({ search, tags: tags.join(",") }));
+      dispatch(getBlogsBySearch({ search, tags: tags.join(",") }));
       history.push(
-        `/posts/search?searchQuery=${search || "none"}&tags=${tags.join(",")}`
+        `/blogs/search?searchQuery=${search || "none"}&tags=${tags.join(",")}`
       );
     }
   };
 
   const handleKeyPress = (e) => {
     if (e.keyCode === 13) {
-      searchPost();
+      searchBlog();
     }
   };
 
@@ -80,11 +79,11 @@ const Home = () => {
               </div>
             ) : (
               <Grid container alignItems="stretch" spacing={3}>
-                {posts?.length > 0 ? (
-                  posts?.map((post) => {
+                {blogs?.length > 0 ? (
+                  blogs?.map((blog) => {
                     return (
-                      <Grid key={post._id} item xs={12} sm={12} md={6} lg={4}>
-                        <Post key={post._id} post={post} />
+                      <Grid key={blog._id} item xs={12} sm={12} md={6} lg={4}>
+                        <Blog key={blog._id} blog={blog} />
                       </Grid>
                     );
                   })
@@ -120,7 +119,7 @@ const Home = () => {
                 variant="outlined"
               />
               <Button
-                onClick={searchPost}
+                onClick={searchBlog}
                 className={classes.searchButton}
                 variant="contained"
                 color="primary"

@@ -1,0 +1,22 @@
+import { AUTH, LOGOUT } from '../action-types/actionTypes';
+import * as api from '../../api/index';
+
+export const enterEmail = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.enterEmail(formData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const signup = (formData, router) => async (dispatch) => {
+  try {
+    const { data } = await api.signUp(formData);
+
+    dispatch({ type: AUTH, data });
+
+    router.push('/');
+  } catch (error) {
+    console.log(error);
+  }
+};

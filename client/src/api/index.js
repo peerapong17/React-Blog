@@ -12,22 +12,24 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const fetchPost = (id) => API.get(`/posts/${id}`);
-export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
-export const fetchUserPosts = (page) => API.get(`/posts/user?page=${page}`);
-export const fetchPostsBySearch = (searchQuery) =>
+export const fetchBlog = (id) => API.get(`/blogs/${id}`);
+export const fetchBlogs = (page) => API.get(`/blogs?page=${page}`);
+export const fetchUserBlogs = (page) => API.get(`/blogs/user?page=${page}`);
+export const fetchBlogsBySearch = (searchQuery) =>
   API.get(
-    `/posts/search?page=${searchQuery.page}&searchQuery=${searchQuery.search}&tags=${
+    `/blogs/search?page=${searchQuery.page}&searchQuery=${searchQuery.search}&tags=${
       searchQuery.tags
     }`
   );
-export const createPost = (newPost) => API.post("/posts", newPost);
-export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
+export const createBlog = (newblog) => API.post("/blogs", newblog);
+export const likeBlog = (id) => API.patch(`/blogs/${id}/likeBlog`);
 export const comment = (value, id) =>
-  API.post(`/posts/${id}/commentPost`, { value });
-export const updatePost = (id, updatedPost) =>
-  API.patch(`/posts/${id}`, updatedPost);
-export const deletePost = (id) => API.delete(`/posts/${id}`);
+  API.post(`/blogs/${id}/commentBlog`, { value });
+export const updateBlog = (id, updatedBlog) =>
+  API.patch(`/blogs/${id}`, updatedBlog);
+export const deleteBlog = (id) => API.delete(`/blogs/${id}`);
 
 export const signIn = (formData) => API.post("/user/signin", formData);
 export const signUp = (formData) => API.post("/user/signup", formData);
+
+export const enterEmail = (formData) => API.post("password/enter-email", formData)

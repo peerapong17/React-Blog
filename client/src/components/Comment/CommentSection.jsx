@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Typography, TextField, Button } from '@material-ui/core/';
 import { useDispatch } from 'react-redux';
 
-import { commentPost } from '../../actions/posts';
+import { commentBlog } from '../../states/action-creators/blogs';
 import useStyles from './styles';
 
 const CommentSection = ({ post }) => {
@@ -14,7 +14,7 @@ const CommentSection = ({ post }) => {
   const commentsRef = useRef();
 
   const handleComment = async () => {
-    const newComments = await dispatch(commentPost(`${user?.result?.name}: ${comment}`, post._id));
+    const newComments = await dispatch(commentBlog(`${user?.result?.name}: ${comment}`, post._id));
 
     setComment('');
     setComments(newComments);
